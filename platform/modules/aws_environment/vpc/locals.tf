@@ -24,7 +24,7 @@ locals {
     ".224.0/19",
   ]
   default_cidr_prefix = regexall("(\\d{1,3}\\.\\d{1,3})\\.\\d{1,3}\\.\\d{1,3}/16", var.vpc_cidr)
-  private_cidrs       = length(var.private_cidrs) > 0 ? var.private_cidrs: [for s in local.default_private_cidr_suffixes : "${local.default_cidr_prefix[0][0]}${s}"]
-  public_cidrs        = length(var.public_cidrs) > 0 ? var.public_cidrs: [for s in local.default_public_cidr_suffixes : "${local.default_cidr_prefix[0][0]}${s}"]
+  private_cidrs       = length(var.private_cidrs) > 0 ? var.private_cidrs : [for s in local.default_private_cidr_suffixes : "${local.default_cidr_prefix[0][0]}${s}"]
+  public_cidrs        = length(var.public_cidrs) > 0 ? var.public_cidrs : [for s in local.default_public_cidr_suffixes : "${local.default_cidr_prefix[0][0]}${s}"]
   isolated_cidrs      = length(var.isolated_cidrs) > 0 ? var.isolated_cidrs : [for s in local.default_isolated_cidr_suffixes : "${local.default_cidr_prefix[0][0]}${s}"]
 }

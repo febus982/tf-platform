@@ -6,6 +6,7 @@ variable "resources_namespace" {
   type = string
 }
 
+############# VPC Config ##########
 variable "azs" {
   type = list(string)
   default = [
@@ -21,16 +22,23 @@ variable "vpc_cidr" {
 }
 
 variable "public_cidrs" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "private_cidrs" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "isolated_cidrs" {
-  type = list(string)
+  type    = list(string)
   default = []
+}
+
+########### EKS Config ############
+
+variable "kubernetes_version" {
+  type = string
+  default = "1.17"
 }

@@ -8,3 +8,7 @@ module "aws_environment" {
   environment_name    = var.environment_name
   resources_namespace = var.resources_namespace
 }
+
+output "update_kubeconfig_command" {
+  value = module.aws_environment.update_kubeconfig_command
+}
