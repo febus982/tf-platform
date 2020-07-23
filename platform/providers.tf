@@ -3,8 +3,8 @@ provider "google" {
 
   credentials = file("credentials/gcp.json")
 
-  region  = "europe-west2"
-  zone    = "europe-west2-a"
+  region = "europe-west2"
+  zone   = "europe-west2-a"
 }
 
 provider "aws" {

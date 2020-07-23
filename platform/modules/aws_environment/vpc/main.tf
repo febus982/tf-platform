@@ -5,8 +5,8 @@ module "vpc" {
   cidr = var.vpc_cidr
 
   azs             = var.azs
-  public_subnets  = var.public_cidrs
-  private_subnets = var.private_cidrs
+  public_subnets  = slice(local.public_cidrs, 0, length(var.azs))
+  private_subnets = slice(local.private_cidrs, 0, length(var.azs))
 
   enable_nat_gateway = true
 
@@ -17,12 +17,12 @@ module "vpc" {
 }
 
 resource "aws_subnet" "isolated_subnet" {
-  count = length(var.isolated_cidrs)
-  cidr_block = var.isolated_cidrs[count.index]
-  vpc_id     = module.vpc.vpc_id
+  count             = length(slice(local.isolated_cidrs, 0, length(var.azs)))
+  cidr_block        = local.isolated_cidrs[count.index]
+  vpc_id            = module.vpc.vpc_id
   availability_zone = var.azs[count.index]
   tags = {
-    Name = "${local.naming_prefix}-vpc-isolated-${var.azs[count.index]}"
+    Name        = "${local.naming_prefix}-vpc-isolated-${var.azs[count.index]}"
     Terraform   = "true"
     Environment = "dev"
   }

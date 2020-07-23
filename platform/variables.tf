@@ -1,9 +1,9 @@
 variable "environment_name" {
-  type = string
+  type    = string
   default = "dev"
 }
 
 variable "resources_namespace" {
-  type = string
+  type    = string
   default = "borg"
 }

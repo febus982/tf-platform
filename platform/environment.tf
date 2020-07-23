@@ -5,6 +5,6 @@
 module "aws_environment" {
   source = "./modules/aws_environment"
 
-  environment_name = var.environment_name
+  environment_name    = var.environment_name
   resources_namespace = var.resources_namespace
 }
