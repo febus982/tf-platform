@@ -7,7 +7,7 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 resource "aws_iam_role" "eks_administrators" {
-  name = "eks_administrators"
+  name = "${local.naming_prefix}-EKSAdministrators"
 
   assume_role_policy = <<EOF
 {
@@ -27,6 +27,7 @@ EOF
 }
 
 provider "kubernetes" {
+  alias = "aws_cluster"
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
@@ -36,6 +37,10 @@ provider "kubernetes" {
 
 module "eks-cluster" {
   create_eks = true
+
+  providers = {
+    kubernetes = kubernetes.aws_cluster
+  }
 
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "${local.naming_prefix}-eks-cluster"
@@ -67,13 +72,12 @@ module "eks-cluster" {
 
   worker_groups_launch_template = [
     {
-      name                    = "spot-1"
+      name                    = "${local.naming_prefix}-spot-1"
       override_instance_types = ["t3.large", "t3a.large", "m5.large", "m5a.large", "m5d.large", "m5ad.large"]
       suspended_processes = ["AZRebalance"]
       spot_instance_pools     = 6
       asg_max_size            = 10
       asg_desired_capacity    = 1
-      kubelet_extra_args      = "--node-labels=node.kubernetes.io/lifecycle=spot ${local.kubelet_tweaks}"
       public_ip               = false
       pre_userdata = local.pre_userdata
       additional_userdata = local.additional_userdata
@@ -81,3 +85,5 @@ module "eks-cluster" {
     },
   ]
 }
+
+# Spot termination handler: https://github.com/aws/aws-node-termination-handler
