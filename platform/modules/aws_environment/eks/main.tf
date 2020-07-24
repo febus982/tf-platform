@@ -27,7 +27,7 @@ EOF
 }
 
 provider "kubernetes" {
-  alias = "aws_cluster"
+  alias                  = "aws_cluster"
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
@@ -63,7 +63,7 @@ module "eks-cluster" {
       asg_max_size        = 10
       suspended_processes = ["AZRebalance"]
 
-      pre_userdata = local.pre_userdata
+      pre_userdata        = local.pre_userdata
       additional_userdata = local.additional_userdata
       kubelet_extra_args  = "--node-labels=node.kubernetes.io/lifecycle=ondemand ${local.kubelet_tweaks}"
 
@@ -74,14 +74,14 @@ module "eks-cluster" {
     {
       name                    = "${local.naming_prefix}-spot-1"
       override_instance_types = ["t3.large", "t3a.large", "m5.large", "m5a.large", "m5d.large", "m5ad.large"]
-      suspended_processes = ["AZRebalance"]
+      suspended_processes     = ["AZRebalance"]
       spot_instance_pools     = 6
       asg_max_size            = 10
       asg_desired_capacity    = 1
       public_ip               = false
-      pre_userdata = local.pre_userdata
-      additional_userdata = local.additional_userdata
-      kubelet_extra_args  = "--node-labels=node.kubernetes.io/lifecycle=spot ${local.kubelet_tweaks}"
+      pre_userdata            = local.pre_userdata
+      additional_userdata     = local.additional_userdata
+      kubelet_extra_args      = "--node-labels=node.kubernetes.io/lifecycle=spot ${local.kubelet_tweaks}"
     },
   ]
 }

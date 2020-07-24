@@ -4,19 +4,19 @@ locals {
 
   # Kubelet and system tweaks
   # Source of tweaks: https://kubedex.com/90-days-of-aws-eks-in-production/
-  kubelet_tweaks  = <<EOT
+  kubelet_tweaks      = <<EOT
 --kube-reserved cpu=250m,memory=$${kube_mem_reserved},ephemeral-storage=1Gi \
 --system-reserved cpu=250m,memory=0.2Gi,ephemeral-storage=1Gi \
 --eviction-hard memory.available<500Mi,nodefs.available<10% \
 EOT
-  pre_userdata = <<EOT
+  pre_userdata        = <<EOT
 if [[ $(ec2-metadata --instance-type) =~ 'large' ]]; then
     kube_mem_reserved=1Gi
 else
     kube_mem_reserved=0.5Gi
 fi
 EOT
-  additional_userdata  = <<EOT
+  additional_userdata = <<EOT
 # Sysctl changes
 ## Disable IPv6
 cat <<EOF > /etc/sysctl.d/10-disable-ipv6.conf

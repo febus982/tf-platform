@@ -39,6 +39,6 @@ variable "isolated_cidrs" {
 ########### EKS Config ############
 
 variable "kubernetes_version" {
-  type = string
+  type    = string
   default = "1.17"
 }
