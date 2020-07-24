@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+
+  terraform:
+    image: local/platform:latest
+    build:
+      context: .
+    volumes:
+      - ./platform:/platform
+      - ~/.aws:/root/.aws
