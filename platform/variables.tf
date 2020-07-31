@@ -1,9 +1,15 @@
-variable "environment_name" {
-  type    = string
-  default = "dev"
+variable "aws_environments" {
+  type = list(object({
+    resources_namespace = string
+    name                = string
+    region              = string
+  }))
 }
 
-variable "resources_namespace" {
-  type    = string
-  default = "borg"
+variable "gcp_environments" {
+  type = list(object({
+    resources_namespace = string
+    name                = string
+    region              = string
+  }))
 }

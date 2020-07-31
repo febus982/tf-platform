@@ -5,3 +5,7 @@ variable "environment_name" {
 variable "resources_namespace" {
   type = string
 }
+
+variable "region" {
+  type = string
+}

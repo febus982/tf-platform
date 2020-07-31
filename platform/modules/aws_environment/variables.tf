@@ -6,6 +6,10 @@ variable "resources_namespace" {
   type = string
 }
 
+variable "region" {
+  type = string
+}
+
 ############# VPC Config ##########
 variable "azs" {
   type = list(string)
