@@ -6,7 +6,7 @@ module "vpc" {
 }
 
 module "kubernetes_engine" {
-  source = "./kubernetes_engine"
+  source = "./gke_cluster"
 
   environment_name    = var.environment_name
   resources_namespace = var.resources_namespace
