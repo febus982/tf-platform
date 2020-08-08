@@ -1,0 +1,5 @@
+---
+docker_push: false
+image_name: "febus982/tf-platform"
+image_tag: "dev"
+...

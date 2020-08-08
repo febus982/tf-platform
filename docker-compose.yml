@@ -1,10 +1,19 @@
 version: '3.8'
 services:
 
-  terraform:
+  platform:
     image: local/platform:latest
     build:
       context: .
     volumes:
-      - ./platform:/platform
+      - .:/platform
       - ~/.aws:/root/.aws
+      - ~/.kube:/root/.kube
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # https://cloud.google.com/sdk/install
+  gcloud:
+    image: google/cloud-sdk
+    volumes:
+      - .:/platform
+

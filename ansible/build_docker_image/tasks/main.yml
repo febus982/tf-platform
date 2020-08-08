@@ -1,0 +1,20 @@
+---
+- name: Log into registry
+  docker_login:
+    # default repository is dockerhub enable this for private repo
+    #    registry: your.private.registry.io
+    username: "{{ docker_username }}"
+    # email is needed for dockerhub
+    email: "{{ docker_email }}"
+    password: "{{ docker_password }}"
+  when: docker_push
+
+- name: Build  docker image
+  docker_image:
+    path: "{{ playbook_dir }}/.."
+    name: "{{ image_name }}"
+    tag: "{{ image_tag }}"
+    force: true
+    state: present
+    push: "{{ docker_push }}"
+...

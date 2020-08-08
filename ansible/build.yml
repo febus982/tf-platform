@@ -1,0 +1,11 @@
+---
+- name: Build platform image
+  hosts: localhost
+  connection: local
+  become: false
+  vars_files:
+    - vars/vars.yml
+  tasks:
+  - include_role:
+      name: build_docker_image
+...
