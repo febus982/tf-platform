@@ -1,0 +1,10 @@
+---
+environment-default:
+  # AWS configuration
+  aws_enabled: false
+  aws_region: eu-west-1
+
+  # GCP configuration
+  gcp_enabled: true
+  gcp_region: europe-west2
+...
