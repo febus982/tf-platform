@@ -3,14 +3,10 @@
 module "gcp_environment" {
   source = "./modules/gcp_environment"
 
-  environment_name    = var.gcp_environments[0].name
-  resources_namespace = var.gcp_environments[0].resources_namespace
+  environment_name    = var.environments[0].name
+  resources_namespace = var.environments[0].resources_namespace
 
-  region = var.gcp_environments[0].region
-}
-
-output "gcloud_cluster_get_credentials_command" {
-  value = module.gcp_environment.gcloud_cluster_get_credentials_command
+  region = var.environments[0].gcp_region
 }
 
 ########### AWS environments ###############
