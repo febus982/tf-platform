@@ -14,7 +14,8 @@
     path: "{{ playbook_dir }}/.."
     name: "{{ image_name }}"
     tag: "{{ image_tag }}"
-    force: true
+    force_source: true
+    force_tag: true
     state: present
     push: "{{ docker_push }}"
 ...
