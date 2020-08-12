@@ -1,7 +1,7 @@
 # gcloud SDK supports up to python 3.7
 FROM python:3.7-slim
 
-ENV TERRAFORM_VERSION=0.12.29
+ENV TERRAFORM_VERSION=0.13.0
 ENV ISTIO_VERSION=1.6.7
 ENV HELM_VERSION=3.2.4
 
@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
+    git \
     gnupg \
     unzip \
     && rm -rf /var/lib/apt/lists/*
