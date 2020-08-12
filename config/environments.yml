@@ -1,7 +1,7 @@
 ---
 environments:
-  - name: dev
-    resources_namespace: borg
+  dev:
+  - resources_namespace: borg
 
     # AWS configuration
     aws_enabled: false

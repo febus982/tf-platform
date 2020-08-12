@@ -1,0 +1,32 @@
+---
+- name: Destroy remote state infrastructure
+  hosts: localhost
+  connection: local
+  become: false
+  vars_files:
+    - vars/vars.yml
+    - "{{ playbook_dir }}/../config/terraform.yml"
+  tasks:
+  - name: "Copy state file from S3 bucket"
+    aws_s3:
+      bucket: "{{ aws_bootstrap.s3_bucket }}"
+      object: "/0_bootstrap_remote.tfstate"
+      dest: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_local/terraform.tfstate"
+      mode: get
+
+  - name: "Initial bootstrap using local state"
+    include_role:
+      name: manage_terraform_stage
+    when: bootstrap_secrets is not defined
+    vars:
+      stage_name: 0_bootstrap_local
+      state: absent
+      terraform_variables:
+        s3_bucket: "{{ aws_bootstrap.s3_bucket }}"
+        dynamodb: "{{ aws_bootstrap.dynamodb if aws_bootstrap.dynamodb is defined else 'terraform' }}"
+        iam_group: "{{ aws_bootstrap.iam_group if aws_bootstrap.iam_group is defined else 'terraform' }}"
+        iam_user: "{{ aws_bootstrap.iam_user if aws_bootstrap.iam_user is defined else 'terraform' }}"
+        secret: "{{ aws_bootstrap.secret if aws_bootstrap.secret is defined else 'terraform' }}"
+      terraform_backend_config:
+        path: "terraform.tfstate"
+...

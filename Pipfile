@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 ansible = "~=2.9.11"
 docker = "*"
+boto3 = "*"
+botocore = "*"
 
 [requires]
 python_version = "3.8"
