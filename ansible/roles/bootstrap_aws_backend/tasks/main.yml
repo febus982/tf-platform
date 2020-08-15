@@ -12,7 +12,7 @@
       name: manage_terraform_stage
     when: bootstrap_secrets is not defined
     vars:
-      stage_name: 0_bootstrap_local
+      stage_name: 0_bootstrap_aws_local
       state: present
       terraform_variables:
         s3_bucket: "{{ bootstrap.aws_s3_bucket }}"
@@ -27,8 +27,8 @@
     when: bootstrap_secrets is not defined
     aws_s3:
       bucket: "{{ bootstrap.aws_s3_bucket }}"
-      object: "/0_bootstrap_remote.tfstate"
-      src: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_local/terraform.tfstate"
+      object: "/0_bootstrap_aws_remote.tfstate"
+      src: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_aws_local/terraform.tfstate"
       mode: put
 
   - name: "Retrieve secrets after initial bootstrap"
@@ -43,7 +43,7 @@
     include_role:
       name: manage_terraform_stage
     vars:
-      stage_name: 0_bootstrap_remote
+      stage_name: 0_bootstrap_aws_remote
       state: present
       terraform_variables:
         s3_bucket: "{{ bootstrap.aws_s3_bucket }}"
@@ -55,5 +55,5 @@
         region: "{{ bootstrap_secrets.region }}"
         bucket:  "{{ bootstrap_secrets.bucket }}"
         dynamodb_table:  "{{ bootstrap_secrets.lock_table }}"
-        key: "0_bootstrap_remote.tfstate"
+        key: "0_bootstrap_aws_remote.tfstate"
 ...

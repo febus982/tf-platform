@@ -10,8 +10,8 @@
   - name: "Copy state file from S3 bucket"
     aws_s3:
       bucket: "{{ bootstrap.aws_s3_bucket }}"
-      object: "/0_bootstrap_remote.tfstate"
-      dest: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_local/terraform.tfstate"
+      object: "/0_bootstrap_aws_remote.tfstate"
+      dest: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_aws_local/terraform.tfstate"
       mode: get
 
   - name: "Initial bootstrap using local state"
@@ -19,7 +19,7 @@
       name: manage_terraform_stage
     when: bootstrap_secrets is not defined
     vars:
-      stage_name: 0_bootstrap_local
+      stage_name: 0_bootstrap_aws_local
       state: absent
       terraform_variables:
         s3_bucket: "{{ bootstrap.aws_s3_bucket }}"
