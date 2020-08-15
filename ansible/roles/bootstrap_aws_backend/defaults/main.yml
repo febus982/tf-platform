@@ -1,0 +1,6 @@
+---
+aws_secret_name: "{{ bootstrap.aws_secret if bootstrap.aws_secret is defined else 'terraform' }}"
+aws_dynamodb_table: "{{ bootstrap.aws_dynamodb_table if bootstrap.aws_dynamodb_table is defined else 'terraform' }}"
+aws_iam_group: "{{ bootstrap.aws_iam_group if bootstrap.aws_iam_group is defined else 'terraform' }}"
+aws_iam_user: "{{ bootstrap.aws_iam_user if bootstrap.aws_iam_user is defined else 'terraform' }}"
+...

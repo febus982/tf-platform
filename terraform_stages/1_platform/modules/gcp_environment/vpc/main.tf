@@ -1,8 +1,9 @@
 data "google_client_config" "current" {}
 
 module "vpc" {
-  source  = "terraform-google-modules/network/google"
-  version = "~> 2.4"
+  source  = "github.com/terraform-google-modules/terraform-google-network"
+//  source  = "terraform-google-modules/network/google"
+//  version = "~> 2.4"
 
   project_id   = data.google_client_config.current.project
   network_name = "${local.naming_prefix}-vpc"

@@ -1,0 +1,59 @@
+---
+  - name: "Check if terraform is already bootstrapped"
+    set_fact:
+      bootstrap_secrets: "{{ lookup('aws_secret', aws_secret_name ) | from_json }}"
+    ignore_errors: true
+    vars:
+      aws_secret_name: aws_secret_name
+    no_log: true
+
+  - name: "Initial bootstrap using local state"
+    include_role:
+      name: manage_terraform_stage
+    when: bootstrap_secrets is not defined
+    vars:
+      stage_name: 0_bootstrap_local
+      state: present
+      terraform_variables:
+        s3_bucket: "{{ bootstrap.aws_s3_bucket }}"
+        dynamodb: aws_dynamodb_table
+        iam_group: aws_iam_group
+        iam_user: aws_iam_user
+        secret: aws_secret_name
+      terraform_backend_config:
+        path: "terraform.tfstate"
+
+  - name: "Copy state file to S3 bucket"
+    when: bootstrap_secrets is not defined
+    aws_s3:
+      bucket: "{{ bootstrap.aws_s3_bucket }}"
+      object: "/0_bootstrap_remote.tfstate"
+      src: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_local/terraform.tfstate"
+      mode: put
+
+  - name: "Retrieve secrets after initial bootstrap"
+    set_fact:
+      bootstrap_secrets: "{{ lookup('aws_secret', '' + aws_secret_name ) | from_json }}"
+    vars:
+      aws_secret_name: aws_secret_name
+    when:  bootstrap_secrets is not defined
+    no_log: true
+
+  - name: "Bootstrap using remote state"
+    include_role:
+      name: manage_terraform_stage
+    vars:
+      stage_name: 0_bootstrap_remote
+      state: present
+      terraform_variables:
+        s3_bucket: "{{ bootstrap.aws_s3_bucket }}"
+        dynamodb: aws_dynamodb_table
+        iam_group: aws_iam_group
+        iam_user: aws_iam_user
+        secret: aws_secret_name
+      terraform_backend_config:
+        region: "{{ bootstrap_secrets.region }}"
+        bucket:  "{{ bootstrap_secrets.bucket }}"
+        dynamodb_table:  "{{ bootstrap_secrets.lock_table }}"
+        key: "0_bootstrap_remote.tfstate"
+...

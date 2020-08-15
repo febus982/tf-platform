@@ -1,11 +1,14 @@
-aws_bootstrap:
+# Terraform backend config
+bootstrap:
   enabled: true
-  s3_bucket: terraform-do8byeqctmumjgorb6dk4yv3
+  type: aws # `aws` or `gcp` (currently only AWS is supported)
+
+  aws_s3_bucket: terraform-do8byeqctmumjgorb6dk4yv3
   # Optional parameters. See https://github.com/vexingcodes/terraform-aws-bootstrap
-#  dynamodb: terraform
-#  iam_group: terraform
-#  iam_user: terraform
-#  secret: terraform
+#  aws_dynamodb_table: terraform
+#  aws_iam_group: terraform
+#  aws_iam_user: terraform
+#  aws_secret: terraform
 
 # This is used only if aws_bootstrap is not enabled
 terraform_backend:

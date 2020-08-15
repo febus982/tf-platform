@@ -109,3 +109,4 @@ fabric.properties
 
 /credentials/
 .vault/
+/local.env

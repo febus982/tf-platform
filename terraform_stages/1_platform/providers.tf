@@ -8,7 +8,4 @@ provider "google" {
   project     = jsondecode(file("credentials/gcp.json")).project_id
 }
 
-provider "aws" {
-  region  = "eu-west-1"
-  profile = "personal"
-}
+provider "aws" {}

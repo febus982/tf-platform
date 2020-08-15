@@ -1,11 +1,11 @@
 ---
 - name: "{{ stage_operation }} terraform stage `{{ stage_name }}`: Setup AWS backend"
   include_tasks: setup_aws_backend.yml
-  when: aws_bootstrap.enabled and terraform_backend_config is not defined
+  when: bootstrap.enabled and bootstrap.type == 'aws' and terraform_backend_config is not defined
 
 - name: "{{ stage_operation }} terraform stage `{{ stage_name }}`: Setup custom backend"
   include_tasks: setup_custom_backend.yml
-  when: not aws_bootstrap.enabled and terraform_backend_config is not defined
+  when: not bootstrap.enabled and terraform_backend_config is not defined
 
 - name: "{{ stage_operation }} terraform stage `{{ stage_name }}`"
   terraform:
