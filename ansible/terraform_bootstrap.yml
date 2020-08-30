@@ -4,11 +4,45 @@
   connection: local
   become: false
   vars_files:
-    - vars/vars.yml
-    - "{{ playbook_dir }}/../config/terraform.yml"
+    - "{{ playbook_dir }}/../config/bootstrap.yml"
   tasks:
-  - name: "Bootstrap AWS backend"
+#  - name: "Bootstrap AWS backend"
+#    include_role:
+#      name: bootstrap_aws_backend
+#    when: bootstrap.type == 'aws' and bootstrap.enabled
+
+  - name: "Bootstrap GCP"
     include_role:
-      name: bootstrap_aws_backend
-    when: bootstrap.type == 'aws' and bootstrap.enabled
+      name: manage_terraform_stage
+    vars:
+      stage_name: 0_bootstrap_gcp
+      state: present
+      terraform_variables:
+        org_id: "{{ lookup('env','GOOGLE_ORGANIZATION_ID') }}"
+        billing_account: "{{ lookup('env','GOOGLE_BILLING_ACCOUNT_ID') }}"
+        group_org_admins: "{{ lookup('env','GOOGLE_IAM_GROUP_ORG_ADMIN') }}"
+        group_billing_admins: "{{ lookup('env','GOOGLE_IAM_GROUP_BILLING_ADMIN') }}"
+        default_region: "{{ bootstrap.gcp_default_region }}"
+
+  - name: "Get terraform outputs from terraform state"
+    command: "terraform output -json"
+    args:
+      chdir: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_gcp"
+    register: tf_output_result
+
+  - name: "Parse terraform outputs"
+    set_fact:
+      bootstrap_outputs: "{{ tf_output_result.stdout | from_json }}"
+
+  - name: "Setup remote backend"
+    template:
+      src: "{{ playbook_dir }}/templates/backend.tf.j2"
+      dest: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_gcp/backend.tf"
+
+  - name: "Setup remote backend"
+    command: "terraform init -force-copy"
+    args:
+      chdir: "{{ playbook_dir }}/../terraform_stages/0_bootstrap_gcp"
+
+
 ...

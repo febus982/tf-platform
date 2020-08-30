@@ -9,8 +9,18 @@ services:
       - local.env
     volumes:
       - .:/platform
-      - ~/.kube:/root/.kube
       - /var/run/docker.sock:/var/run/docker.sock
+
+  bootstrap:
+    image: local/platform:latest
+    build:
+      context: .
+    env_file:
+      - local.env
+    volumes:
+      - .:/platform
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["pipenv", "run", "bootstrap"]
 
   # https://cloud.google.com/sdk/install
   gcloud:

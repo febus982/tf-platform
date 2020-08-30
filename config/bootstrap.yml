@@ -1,7 +1,8 @@
 # Terraform backend config
+project_name: borg
+
 bootstrap:
   enabled: true
-  type: aws # `aws` or `gcp` (currently only AWS is supported)
 
   aws_s3_bucket: terraform-do8byeqctmumjgorb6dk4yv3
   # Optional parameters. See https://github.com/vexingcodes/terraform-aws-bootstrap
@@ -10,6 +11,4 @@ bootstrap:
 #  aws_iam_user: terraform
 #  aws_secret: terraform
 
-# This is used only if aws_bootstrap is not enabled
-terraform_backend:
-  path: bootstrap.tfstate
+  gcp_default_region: europe-west2

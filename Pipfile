@@ -11,5 +11,5 @@ docker = "*"
 boto3 = "*"
 botocore = "*"
 
-[requires]
-python_version = "3.8"
+[scripts]
+bootstrap = 'bash -c "gcloud auth login --update-adc; ansible-playbook -vvvv ansible/terraform_bootstrap.yml"'
